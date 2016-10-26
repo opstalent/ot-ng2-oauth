@@ -36,7 +36,7 @@ export class AuthService {
     /**
      * Verifies if the `user` has role
      */
-    hasRole(role) {
+    hasRole(role: any) {
         let user = this.oAuthUser.getUser();
         if (user && !isEmpty(user.roles)) {
             return user.roles.indexOf(role) > -1;
@@ -44,7 +44,7 @@ export class AuthService {
         return false;
     }
 
-    hasHierarchicalRole(role) {
+    hasHierarchicalRole(role: any) {
         let user = this.oAuthUser.getUser();
         if (!isEmpty(user.roles)) {
             let userRole: any = head(user.roles);
@@ -85,13 +85,13 @@ export class AuthService {
             });
     }
 
-    forgotPassword(username): Observable<any> {
+    forgotPassword(username: any): Observable<any> {
         return this.http.post(`${this.baseUrl}/resetting/send-email`,
           JSON.stringify({ username }))
           .map(res => res.json());
     }
 
-    verify(resetToken, password): Observable<any> {
+    verify(resetToken: any, password: any): Observable<any> {
         let data = {
             fos_user_resetting_form: {
                 plainPassword: {

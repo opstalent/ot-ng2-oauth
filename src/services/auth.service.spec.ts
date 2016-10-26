@@ -123,7 +123,7 @@ describe('AuthService', () => {
     it('should redirect to home on login if user is not an admin', inject([XHRBackend], fakeAsync((backend: MockBackend) => {
       spyOn(user, 'getUser').and.returnValue({ roles: ['CHUCK_NORRIS_ROLE']});
       spyOn(router, 'navigate').and.returnValue(true);
-      backend.connections.subscribe((connection) => {
+      backend.connections.subscribe((connection: any) => {
         let response = new ResponseOptions({body: JSON.stringify({})});
         connection.mockRespond(new Response(response));
       });
@@ -136,7 +136,7 @@ describe('AuthService', () => {
       spyOn(user, 'getUser').and.returnValue({
         roles: ['ROLE_COMPANY_ADMIN', 'ROLE_SUPER_ADMIN']});
       spyOn(router, 'navigate').and.returnValue(true);
-      backend.connections.subscribe((connection) => {
+      backend.connections.subscribe((connection: any) => {
         let response = new ResponseOptions({body: JSON.stringify({})});
         connection.mockRespond(new Response(response));
       });

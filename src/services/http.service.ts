@@ -7,7 +7,7 @@ import { Headers,
   RequestOptions,
   RequestOptionsArgs,
   Response } from '@angular/http';
-import { Observable, Subject } from 'rxjs/Rx';
+import { Observable, Subject, Observer } from 'rxjs/Rx';
 
 
 @Injectable()
@@ -122,7 +122,7 @@ export class HttpService {
 
     protected intercept(url: string | Request,
       options: RequestOptionsArgs = new RequestOptions): Observable<Response> {
-        return Observable.create(observer => {
+        return Observable.create((observer: Observer<any>) => {
             if (options.headers && options.headers.has('Authorization')) {
                 options.headers.delete('Authorization');
             }
@@ -133,8 +133,8 @@ export class HttpService {
         }).retryWhen((errors: any) => this.errorHandler(errors, options));
     }
 
-    protected errorHandler(errors, options?: RequestOptionsArgs): any {
-        return errors.switchMap(err => {
+    protected errorHandler(errors: any, options?: RequestOptionsArgs): any {
+        return errors.switchMap((err: any) => {
             if (err.status !== 401 && err.status !== 400) {
                 return Observable.throw(err.json());
             }

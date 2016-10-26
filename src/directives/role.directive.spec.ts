@@ -21,7 +21,7 @@ class TestRoleComponent { }
 
 @Injectable()
 class AuthServiceMock {
-  hasHierarchicalRole(role) {  }
+  hasHierarchicalRole(role: any) {  }
 }
 
 describe('Role directive', () => {
