@@ -9,7 +9,7 @@
     "typings": "./node_modules/typings/dist/bin.js",
     "webdriver-update": "webdriver-manager update",
     "webdriver-start": "webdriver-manager start",
-    "postinstall": "npm run webdriver-update && typings install",
+    "postinstall": "typings install",
     "e2e": "protractor",
     "e2e-live": "protractor --elementExplorer",
     "test": "karma start",
