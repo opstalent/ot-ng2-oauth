@@ -8,9 +8,11 @@ import {
     Response
 }                       from '@angular/http';
 import { OAuthService } from './oauth.service';
+
 import { OAuthToken }   from './token.service';
 import { 
     Observable, 
+    Observer, 
     Subject 
 }                       from 'rxjs/Rx';
 
@@ -116,7 +118,7 @@ export class HttpService {
     }
 
     protected intercept(url: string | Request, options: RequestOptionsArgs = new RequestOptions): Observable<Response> {
-        return Observable.create((observer: any) => {
+        return Observable.create((observer: Observer<any>) => {
             if (options.headers && options.headers.has('Authorization')) {
                 options.headers.delete('Authorization');
             }
@@ -133,8 +135,7 @@ export class HttpService {
                 return Observable.throw(err.json());
             }
             let data = err.json();
-            if (400 === err.status
-                && ['invalid_request', 'invalid_grant'].indexOf(data.error) !== -1) {
+            if (400 === err.status && ['invalid_request', 'invalid_grant'].indexOf(data.error) !== -1) {
                 OAuthToken.removeToken();
                 return Observable.throw(err.json());
             }
