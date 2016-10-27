@@ -1,23 +1,81 @@
-import { Injectable, Inject } from '@angular/core';
-import { Http, Headers, RequestOptions, Response } from '@angular/http';
-import { OAuthToken } from './token.service';
-import { Observable } from 'rxjs/Rx';
-import { IAuthConfig, AUTH_CONFIG } from '../models/opAuthConfig';
+import { 
+    Injectable, 
+    Inject 
+}                       from '@angular/core';
+import { 
+    Http, 
+    Headers, 
+    RequestOptions, 
+    Response 
+}                       from '@angular/http';
+import { Observable }   from 'rxjs/Rx';
+import { 
+    IAuthConfig, 
+    AUTH_CONFIG 
+}                       from '../models/opAuthConfig';
+import { OAuthToken }   from './token.service';
 
-import { forOwn } from 'lodash';
+import { forOwn }       from 'lodash';
 
+/**
+ * 
+ * 
+ * @export
+ * @class OAuthService
+ */
 @Injectable()
 export class OAuthService {
+
+    /**
+     * 
+     * 
+     * @protected
+     * @type {string}
+     * @memberOf OAuthService
+     */
     protected clientId: string;
+    /**
+     * 
+     * 
+     * @protected
+     * @type {string}
+     * @memberOf OAuthService
+     */
     protected clientSecret: string;
+    /**
+     * 
+     * 
+     * @protected
+     * @type {string}
+     * @memberOf OAuthService
+     */
     protected baseUrl: string;
+    /**
+     * 
+     * 
+     * @protected
+     * @type {string}
+     * @memberOf OAuthService
+     */
     protected grantPath: string;
+    /**
+     * 
+     * 
+     * @protected
+     * @type {string}
+     * @memberOf OAuthService
+     */
     protected revokePath: string;
 
-    constructor(
-        protected http: Http, 
-        @Inject(AUTH_CONFIG)private authConfig: IAuthConfig
-    ) {
+    /**
+     * Creates an instance of OAuthService.
+     * 
+     * @param {Http} http
+     * @param {IAuthConfig} authConfig
+     * 
+     * @memberOf OAuthService
+     */
+    constructor(protected http: Http, @Inject(AUTH_CONFIG)private authConfig: IAuthConfig) {
         this.clientId = authConfig.clientId;
         this.clientSecret = authConfig.clientSecret;
         this.baseUrl = authConfig.baseUrl;
@@ -26,8 +84,11 @@ export class OAuthService {
     }
 
     /**
-     * Verifies if the `user` is authenticated or not based on the `token`
-     * @return {Boolean}
+     * 
+     * 
+     * @returns
+     * 
+     * @memberOf OAuthService
      */
     isAuthenticated() {
         let date = Math.floor(Date.now() / 1000);
@@ -39,8 +100,13 @@ export class OAuthService {
     }
 
     /**
-     * Retrieves the `access_token` and stores the `response.data`
-     * using the `OAuthToken`.
+     * 
+     * 
+     * @param {*} [data]
+     * @param {*} [options]
+     * @returns {Observable<Response>}
+     * 
+     * @memberOf OAuthService
      */
     getClientToken(data?: any, options?: any): Observable<Response> {
         let search = {
@@ -60,13 +126,17 @@ export class OAuthService {
     }
 
     /**
-     * Retrieves the `access_token` and stores the `response.data`
-     * using the `OAuthToken`.
+     * 
+     * 
+     * @param {string} username
+     * @param {string} password
+     * @param {*} [data]
+     * @param {*} [options]
+     * @returns {Observable<Response>}
+     * 
+     * @memberOf OAuthService
      */
-    getAccessToken(username: string,
-      password: string,
-      data?: any,
-      options?: any): Observable<Response> {
+    getAccessToken(username: string, password: string, data?: any, options?: any): Observable<Response> {
         let search = {
             client_id: this.clientId,
             grant_type: 'password',
@@ -84,8 +154,13 @@ export class OAuthService {
     }
 
     /**
-     * Retrieves the `refresh_token` and stores the `response.data`
-     * using the `OAuthToken`.
+     * 
+     * 
+     * @param {*} [data]
+     * @param {*} [options]
+     * @returns {Observable<Response>}
+     * 
+     * @memberOf OAuthService
      */
     getRefreshToken(data?: any, options?: any): Observable<Response> {
         let search = {
@@ -103,10 +178,15 @@ export class OAuthService {
                 return token;
             });
     }
-
+  
     /**
-     * Revokes the `token` and removes the stored `token`
-     * using the `OAuthToken`.
+     * 
+     * 
+     * @param {*} [data]
+     * @param {*} [options]
+     * @returns {Observable<Response>}
+     * 
+     * @memberOf OAuthService
      */
     revokeToken(data?: any, options?: any): Observable<Response> {
         let refreshToken = OAuthToken.getRefreshToken();
@@ -127,6 +207,17 @@ export class OAuthService {
             });
     }
 
+    /**
+     * 
+     * 
+     * @protected
+     * @param {*} body
+     * @param {*} [data]
+     * @param {*} [optionsData={}]
+     * @returns
+     * 
+     * @memberOf OAuthService
+     */
     protected getRequest(body: any, data?: any, optionsData: any = {}) {
         if (this.clientSecret) {
             body.client_secret = this.clientSecret;

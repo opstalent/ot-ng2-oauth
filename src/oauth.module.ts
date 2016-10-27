@@ -1,25 +1,14 @@
 import {
     NgModule,
     ModuleWithProviders
-}                               from '@angular/core';
-import {AuthService}            from './services/auth.service';
-import {OAuthService}           from './services/oauth.service';
-import {UserRoleDirective}      from './directives/role.directive';
-import {IsLoggedInDirective}    from './directives/IsLoggedIn.directive';
-import {HttpService}            from './services/http.service';
-import {CommonModule}           from '@angular/common';
+}                                   from '@angular/core';
+import { CommonModule }             from '@angular/common';
+import { OAuthService }             from './services/oauth.service';
+import { HttpService }              from './services/http.service';
 
 @NgModule({
     imports: [
         CommonModule,
-    ],
-    declarations: [
-        UserRoleDirective,
-        IsLoggedInDirective,
-    ],
-    exports: [
-        UserRoleDirective,
-        IsLoggedInDirective
     ]
 })
 export class OAuthModule {
@@ -27,7 +16,6 @@ export class OAuthModule {
         return {
             ngModule: OAuthModule,
             providers: [
-                AuthService,
                 OAuthService,
                 HttpService,
             ]

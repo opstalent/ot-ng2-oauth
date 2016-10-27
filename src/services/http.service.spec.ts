@@ -1,4 +1,11 @@
 import {
+    Http,
+    XHRBackend,
+    HttpModule,
+    Response,
+    ResponseOptions
+}                           from '@angular/http';
+import {
     fakeAsync,
     tick,
     async,
@@ -11,13 +18,6 @@ import {
     MockConnection
 }                           from '@angular/http/testing';
 
-import {
-    Http,
-    XHRBackend,
-    HttpModule,
-    Response,
-    ResponseOptions
-}                           from '@angular/http';
 import { OAuthService }     from './oauth.service';
 import { HttpService }      from './http.service';
 
@@ -40,9 +40,7 @@ describe('HttpService', () => {
       expect(service instanceof HttpService).toBe(true);
     }));
 
-  it('can instantiate service with "new"',
-            inject([Http, OAuthService],
-            (http: Http, oAuthService: OAuthService) => {
+  it('can instantiate service with "new"', inject([Http, OAuthService], (http: Http, oAuthService: OAuthService) => {
     expect(http).not.toBeNull('http should be provided');
     let service = new HttpService(oAuthService, http);
     expect(service instanceof HttpService).toBe(true, 'new service should be ok');
@@ -53,7 +51,7 @@ describe('HttpService', () => {
       expect(backend).not.toBeNull('backend should be provided');
   }));
 
-  describe('Http service', () => {
+  describe('HttpService methods', () => {
     let service: HttpService;
     let http: Http;
 
@@ -65,26 +63,20 @@ describe('HttpService', () => {
 
     it('should return correct value when a request is sent', inject([XHRBackend], fakeAsync((backend: MockBackend) => {
         backend.connections.subscribe((c: MockConnection) => {
-               expect(c.request.url).toBe('https://google.com');
-               c.mockRespond(new Response(new ResponseOptions({body: 'Whos there?'})));
-             });
-        service.request('https://google.com').subscribe(
-            (data) => { expect(data.text()).toEqual('Whos there?'); } );
-            tick();
+            expect(c.request.url).toBe('https://google.com');
+            c.mockRespond(new Response(new ResponseOptions({body: 'Whos there?'})));
+        });
+        service.request('https://google.com').subscribe(data => expect(data.text()).toEqual('Whos there?'));
+        tick();
     })));
 
     it('should return correct error when response is with error', inject([XHRBackend], fakeAsync((backend: MockBackend) => {
         backend.connections.subscribe((c: MockConnection) => {
-               expect(c.request.url).toBe('https://google.com');
-               c.mockRespond(new Response(new ResponseOptions({
-                   status: 401, body: { error: 'invalid_grant'} })
-                ));
-             });
-        service.request('https://google.com').subscribe(
-            (data) => { expect(data.json()).toEqual({ error: 'invalid_grant'}); } );
-            tick();
+            expect(c.request.url).toBe('https://google.com');
+            c.mockRespond(new Response(new ResponseOptions({status: 401, body: { error: 'invalid_grant'} })));
+        });
+        service.request('https://google.com').subscribe(data => expect(data.json()).toEqual({ error: 'invalid_grant'}));
+        tick();
     })));
-
   });
-
 });

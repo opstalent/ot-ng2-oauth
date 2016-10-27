@@ -14,8 +14,8 @@ import {
     HttpModule
 }                           from '@angular/http';
 
-import { OAuthService }       from './oauth.service';
-import { AUTH_CONFIG }    from '../models/opAuthConfig';
+import { OAuthService }     from './oauth.service';
+import { AUTH_CONFIG }      from '../models/opAuthConfig';
 
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/catch';
